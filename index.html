@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Erasmus Chile · Buscador de oportunidades académicas en Europa</title>
+<meta name="description" content="Explora másteres Erasmus Mundus desde Chile, compara plazos y requisitos y visita el sitio de cada programa.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -19,7 +20,12 @@ html{scroll-behavior:smooth;scroll-padding-top:72px}
 body{margin:0;font-family:'Plus Jakarta Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--ink);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased}
 a{color:inherit}
 button{font:inherit;cursor:pointer}
-:focus-visible{outline:3px solid var(--sun);outline-offset:2px;border-radius:8px}
+:focus-visible{outline:3px solid var(--ink);outline-offset:3px;box-shadow:0 0 0 2px #fff}
+.top :focus-visible,footer :focus-visible{outline-color:var(--sun)}
+.searchbox:focus-within{outline:3px solid var(--sun);outline-offset:3px}
+.searchbox input:focus-visible{outline:0;box-shadow:none}
+.skip-link{position:fixed;top:8px;left:8px;z-index:500;padding:12px 16px;border-radius:10px;background:var(--ink);color:#fff;transform:translateY(calc(-100% - 16px))}
+.skip-link:focus{transform:none}
 .wrap{max-width:1200px;margin:0 auto;padding:0 20px}
 
 /* NAV */
@@ -30,7 +36,6 @@ button{font:inherit;cursor:pointer}
 .nav-links{display:flex;gap:4px}
 .nav-links a{text-decoration:none;font-weight:700;font-size:.88rem;color:var(--muted);padding:8px 12px;border-radius:999px}
 .nav-links a:hover{background:#fff;color:var(--ink)}
-@media(max-width:560px){.nav-links a:nth-child(n+3){display:none}}
 
 /* CABECERA COMPACTA */
 .top{position:relative;overflow:hidden;color:#fff;background:linear-gradient(135deg,#1e1b8f 0%,#3b2bd9 55%,#0ea5e9 100%);border-radius:0 0 30px 30px;padding:26px 0 74px}
@@ -286,9 +291,28 @@ footer ul{margin:0;padding-left:18px}
 }
 @media(max-width:420px){.tiles{grid-template-columns:1fr}.keys{grid-template-columns:1fr 1fr}}
 
+/* Acceso directo y navegación móvil */
+.card{min-width:0}
+.card h3{overflow-wrap:anywhere}
+.card .keys{grid-template-columns:repeat(2,minmax(0,1fr))}
+.k{min-width:0;overflow-wrap:anywhere}
+.card .actions .btn.pri{flex:2 1 160px}
+.card .actions .btn.sec{flex:1 1 100px}
+.sh-in>.btn{justify-self:stretch}
+.sh-actions .row .btn{min-width:0;flex:1 1 145px}
+@media(max-width:560px){
+  html{scroll-padding-top:112px}
+  .nav .wrap{height:auto;flex-direction:column;align-items:stretch;gap:2px;padding-top:8px;padding-bottom:4px}
+  .nav-links{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0}
+  .nav-links a{display:flex;align-items:center;justify-content:center;text-align:center;min-height:44px;padding:4px;font-size:.78rem}
+  .searchbox button{display:block;padding:10px 12px;min-height:44px}
+  .searchbox input{font-size:16px}
+  .grid{grid-template-columns:minmax(0,1fr)}
+}
 </style>
 </head>
 <body>
+<a class="skip-link" href="#main-content">Saltar al contenido principal</a>
 
 <header class="nav">
   <div class="wrap">
@@ -319,7 +343,7 @@ footer ul{margin:0;padding-left:18px}
   </div>
 </div>
 
-<main class="wrap">
+<main class="wrap" id="main-content" tabindex="-1">
   <div class="panel" id="programas">
     <div class="fl scrollrow"><span class="lbl">Convocatoria</span><span id="statusChips" class="fl" style="margin:0"></span></div>
     <div class="fl scrollrow"><span class="lbl">Área</span><span id="areaChips" class="fl" style="margin:0"></span></div>
@@ -595,8 +619,8 @@ function card(p){
     </div>
     <div class="flags">${flags}</div>
     <div class="actions">
-      <button class="btn pri brand" type="button" data-sheet="${p.id}">Ver ficha para postular</button>
-      <a class="btn sec" href="${p.url}" target="_blank" rel="noopener" aria-label="Sitio del programa ${esc(p.short)} (se abre en otra pestaña)">Sitio ↗</a>
+      <a class="btn pri brand" href="${esc(p.url)}" target="_blank" rel="noopener" aria-label="Ir al sitio de ${esc(p.short)} (se abre en otra pestaña)">Ir al programa ↗</a>
+      <button class="btn sec" type="button" data-sheet="${p.id}" aria-label="Ver ficha de ${esc(p.short)}">Ver ficha</button>
     </div>
   </div></article>`;
 }
@@ -639,6 +663,7 @@ function sheetHtml(p){
     <div><div class="badges" style="margin-bottom:8px">${badges}</div>
       <div class="short">${esc(p.short)}</div><h2 id="shT">${esc(p.title)}</h2><p class="en">${esc(p.en)}</p></div>
     <p class="sum" style="font-size:1rem;margin:0;display:block">${esc(p.sum)}</p>
+    <a class="btn big brand" href="${esc(p.url)}" target="_blank" rel="noopener" aria-label="Ir al sitio de ${esc(p.short)} (se abre en otra pestaña)">Ir al programa ↗</a>
     <div class="sh-sec"><h4>Lo esencial para postular</h4>
       <div class="tiles">${tClose}${tAppl}${tStart}${tLang}${tBeca}${tDur}${tAud}</div></div>
     ${sites}
@@ -647,12 +672,13 @@ function sheetHtml(p){
     ${p.note?`<div class="note">⚠️ ${esc(p.note)}</div>`:""}
     ${missHtml}
     <div class="sh-actions">
-      <a class="btn big brand" href="${p.url}" target="_blank" rel="noopener">Ir al programa y postular ↗</a>
+      <a class="btn big brand" href="${esc(p.url)}" target="_blank" rel="noopener">Ir al programa ↗</a>
       <div class="row">
         ${p.ov?`<a class="btn sec" href="${p.ov}" target="_blank" rel="noopener">Ficha Erasmus+ ↗</a>`:""}
         ${p.geo.length?`<button class="btn sec" type="button" data-focus="${p.id}" data-fromsheet="1">📍 Ver en el mapa</button>`:""}
         <button class="btn sec" type="button" data-fav="${p.id}" data-keepsheet="1" aria-pressed="${FAV.has(p.id)}">${FAV.has(p.id)?"★ Guardado":"☆ Guardar"}</button>
-        <button class="btn sec" type="button" data-copy="${p.id}">🔗 Copiar enlace</button>
+        <button class="btn sec" type="button" data-copy="${p.id}">Copiar web del programa</button>
+        <button class="btn sec" type="button" data-share="${p.id}">Compartir ficha</button>
       </div>
     </div>
     <div class="srcline">${hasDates?"✔ Fecha de cierre leída en el sitio oficial del programa (16 nov 2026).":"Sin fecha de cierre publicada en el sitio al 16 nov 2026."} Los plazos cambian: confirma en el sitio antes de postular.</div>
@@ -670,7 +696,8 @@ function openSheet(id){
 function closeSheet(){
   $("#sheet").hidden=true; openId=null;
   if(!fsOn) document.body.classList.remove("noscroll");
-  if(lastFocus&&lastFocus.focus) try{lastFocus.focus();}catch(e){}
+  const target=lastFocus&&lastFocus.isConnected&&lastFocus!==document.body?lastFocus:$("#q");
+  if(target) target.focus();
 }
 let toastT=null;
 function toast(msg){ const t=$("#toast"); t.textContent=msg; t.hidden=false; clearTimeout(toastT); toastT=setTimeout(()=>t.hidden=true,2200); }
@@ -904,6 +931,11 @@ document.addEventListener("click",e=>{
   if(t.classList.contains("sheet-x")||d.sheetclose){ closeSheet(); return; }
   if(d.sheet){ openSheet(d.sheet); return; }
   if(d.copy){ const p=P.find(x=>x.id===d.copy); if(p) copyText(p.url); return; }
+  if(d.share){
+    const p=P.find(x=>x.id===d.share); if(!p) return;
+    const url=new URL(location.href); url.search=""; url.hash="";
+    url.searchParams.set("programa",p.id); copyText(url.href); return;
+  }
   if(d.rm){
     const k=d.rm;
     if(k==="st") S.status="all"; else if(k==="q"){ S.q=""; $("#q").value=""; }
@@ -915,7 +947,16 @@ document.addEventListener("click",e=>{
   if(d.more){ S.allCountries=!S.allCountries; render(); return; }
   if(d.st){ S.status=(S.status===d.st&&d.st!=="all")?"all":d.st; render(); return; }
   if(d.sp){ S[d.sp]=!S[d.sp]; render(); return; }
-  if(d.fav){ FAV.has(d.fav)?FAV.delete(d.fav):FAV.add(d.fav); saveFav(); render(true); if(d.keepsheet&&openId){ const p=P.find(x=>x.id===openId); $("#sheetCard").innerHTML=sheetHtml(p); const x=$(".sheet-x"); } return; }
+  if(d.fav){
+    FAV.has(d.fav)?FAV.delete(d.fav):FAV.add(d.fav); saveFav(); render(true);
+    if(d.keepsheet&&openId){
+      const p=P.find(x=>x.id===openId); $("#sheetCard").innerHTML=sheetHtml(p);
+      $("#sheetCard [data-fav]")?.focus();
+    }else{
+      (document.getElementById("p-"+d.fav)?.querySelector(".fav")||$("#reset"))?.focus();
+    }
+    return;
+  }
   if(d.morecards){ S.limit+=PAGE; render(true); return; }
   if(d.allcards){ S.limit=1e9; render(true); return; }
   if(d.focus){
@@ -944,6 +985,8 @@ $("#searchForm").addEventListener("submit",e=>{ e.preventDefault(); render(); co
 $("#sort").addEventListener("change",e=>{ S.sort=e.target.value; render(); });
 
 renderStrip(); renderChl(); render(); applyView();
+const sharedId=new URLSearchParams(location.search).get("programa");
+if(sharedId&&P.some(p=>p.id===sharedId)) openSheet(sharedId);
 </script>
 </body>
 </html>
